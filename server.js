@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import cors from "cors";
 import axios from "axios";
@@ -9,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 🔹 URL de base PayDunya
 const PAYDUNYA_BASE = "https://app.paydunya.com/api/v1";
 
 // =========================
@@ -17,11 +19,10 @@ const PAYDUNYA_BASE = "https://app.paydunya.com/api/v1";
 app.post("/ipn", async (req, res) => {
   try {
     const { invoice } = req.body;
-    if (!invoice) {
-      return res.status(400).send("NO_INVOICE");
-    }
 
-    // Vérifie la facture auprès de PayDunya
+    if (!invoice) return res.status(400).send("NO_INVOICE");
+
+    // Vérification auprès de PayDunya
     const verify = await axios.get(
       `${PAYDUNYA_BASE}/checkout-invoice/confirm/${invoice.token}`,
       {
@@ -34,10 +35,8 @@ app.post("/ipn", async (req, res) => {
     );
 
     if (verify.data.status === "completed") {
-      // 🔥 Recharge validée : mets à jour ton portefeuille ICI
-
+      // 🔹 Paiement validé : mettre à jour le portefeuille ici
       console.log("Paiement confirmé :", verify.data);
-
       res.status(200).send("OK");
     } else {
       console.log("Paiement non validé :", verify.data);
@@ -48,7 +47,6 @@ app.post("/ipn", async (req, res) => {
     res.status(500).send("ERROR");
   }
 });
-
 
 // =========================
 // 🔹 Route Recharge
@@ -83,7 +81,6 @@ app.post("/recharge", async (req, res) => {
       }
     );
 
-    // ✅ Renvoie un status success + info de la facture
     res.json({
       status: "success",
       message: "Facture créée avec succès",
@@ -122,8 +119,7 @@ app.post("/withdraw", async (req, res) => {
       }
     );
 
-    // 🔹 Vérifie si la réponse indique un succès
-    if (response.data && response.data.status === "success") {
+    if (response.data?.status === "success") {
       res.json({
         status: "success",
         message: "Retrait effectué avec succès",
@@ -145,4 +141,5 @@ app.post("/withdraw", async (req, res) => {
 // =========================
 // 🔹 Démarrage serveur
 // =========================
-app.listen(3000, () => console.log("✅ Serveur PayCash backend sur port 3000"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Serveur PayCash backend sur le port ${PORT}`));
