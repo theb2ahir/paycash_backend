@@ -141,5 +141,5 @@ app.post("/withdraw", async (req, res) => {
 // =========================
 // 🔹 Démarrage serveur
 // =========================
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`✅ Serveur PayCash backend sur le port ${PORT}`));
