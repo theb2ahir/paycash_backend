@@ -13,6 +13,10 @@ app.use(express.json());
 // 🔹 URL de base PayDunya
 const PAYDUNYA_BASE = "https://app.paydunya.com/api/v1";
 
+app.get("/", (req, res) => {
+  res.send("✅ Serveur PayCash backend est en ligne !");
+});
+
 // =========================
 // 🔹 Route IPN PayDunya
 // =========================
