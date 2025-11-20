@@ -88,9 +88,7 @@ app.get("/", (req, res) => {
   res.send("✅ Serveur PayCash minimal (no-storage) — en ligne");
 });
 
-// Create invoice (checkout) - PayIn
-// Body: { amount, userId, operator }
-// Response: { status: 'success', token, payment_url, raw: <paydunya-response> }
+
 app.post("/recharge", async (req, res) => {
   try {
     const { amount, userId, operator } = req.body;
