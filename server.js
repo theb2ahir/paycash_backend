@@ -119,6 +119,7 @@ app.post("/recharge", async (req, res) => {
     });
 
     const invoice = pdRes.data;
+    console.log("PayDunya response:", invoice);
     const token = invoice?.token ?? invoice?.invoice_token ?? null;
     const payment_url = extractCheckoutUrl(invoice) || null;
 
